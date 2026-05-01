@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reporte Workshop 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+:root{
+  --bg:#f4f3ef;--surf:#fff;--surf2:#eeecea;--bord:#e0ddd8;--bord2:#c8c4be;
+  --navy:#1a2340;--blue:#2563eb;--blue-l:#dbeafe;--blue-m:#93c5fd;
+  --green:#16a34a;--green-l:#dcfce7;--green-m:#86efac;
+  --amber:#d97706;--amber-l:#fef3c7;--amber-m:#fcd34d;
+  --red:#dc2626;--red-l:#fee2e2;--red-m:#fca5a5;
+  --purple:#7c3aed;--purple-l:#ede9fe;
+  --teal:#0d9488;--teal-l:#ccfbf1;
+  --text:#1a1814;--muted:#6b6560;--dim:#9b958f;
+  --sans:'Plus Jakarta Sans',sans-serif;--mono:'IBM Plex Mono',monospace;
+  --r:10px;--tr:0.22s cubic-bezier(.4,0,.2,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
+.page{max-width:1320px;margin:0 auto;padding:1.25rem 1rem 4rem}
+
+/* HEADER */
+.hdr{padding:.75rem 0 1rem;margin-bottom:.25rem;border-bottom:2px solid var(--navy)}
+.hdr-top{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.hdr-brand{display:flex;align-items:center;gap:10px}
+.hdr-logo{width:34px;height:34px;background:var(--navy);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.hdr-logo svg{width:18px;height:18px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.hdr-ttl{font-size:19px;font-weight:800;letter-spacing:-.03em;color:var(--navy);line-height:1.1}
+.hdr-sub{font-size:11px;color:var(--muted);margin-top:2px}
+.hdr-meta{font-family:var(--mono);font-size:10px;color:var(--muted);text-align:right;line-height:1.8}
+.hdr-meta b{color:var(--navy)}
+.pills{display:flex;gap:5px;flex-wrap:wrap;margin-top:.55rem}
+.pill{font-family:var(--mono);font-size:9px;padding:3px 8px;border-radius:4px;border:1px solid var(--bord2);color:var(--muted);background:var(--surf)}
+.pill.hi{background:var(--navy);color:#fff;border-color:var(--navy)}
+.pill.vac{background:var(--teal-l);color:var(--teal);border-color:#99f6e4}
+
+/* FILTER BAR */
+.filter-bar{display:flex;gap:6px;flex-wrap:wrap;margin:.9rem 0 .75rem;align-items:center}
+.flbl{font-family:var(--mono);font-size:10px;color:var(--muted);white-space:nowrap}
+.fg{display:flex;gap:4px;flex-wrap:wrap}
+.ftab{font-family:var(--mono);font-size:10px;padding:5px 13px;border-radius:20px;border:1.5px solid var(--bord2);color:var(--muted);cursor:pointer;transition:all var(--tr);background:var(--surf);user-select:none;white-space:nowrap}
+.ftab:hover{border-color:var(--navy);color:var(--navy)}
+.ftab.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.divr{width:1px;height:22px;background:var(--bord2);margin:0 3px;align-self:center}
+
+
+
+/* SECTION */
+.sec{display:flex;align-items:center;gap:.75rem;margin:1.1rem 0 .6rem}
+.sec h2{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);white-space:nowrap}
+.sec::after{content:'';flex:1;height:1px;background:var(--bord)}
+
+/* KPI */
+.kpi-row{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-bottom:.85rem}
+.kpi{background:var(--surf);border:1px solid var(--bord);border-radius:var(--r);padding:.8rem .85rem .75rem;position:relative;overflow:hidden;transition:box-shadow var(--tr)}
+.kpi:hover{box-shadow:0 2px 12px rgba(0,0,0,.07)}
+.kpi-accent{position:absolute;top:0;left:0;right:0;height:3px;border-radius:var(--r) var(--r) 0 0}
+.kpi.b .kpi-accent{background:var(--blue)}
+.kpi.g .kpi-accent{background:var(--green)}
+.kpi.a .kpi-accent{background:var(--amber)}
+.kpi.r .kpi-accent{background:var(--red)}
+.kpi.p .kpi-accent{background:var(--purple)}
+.kpi-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:.4rem}
+.kpi-lbl{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
+.kpi-ico{width:25px;height:25px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.kpi.b .kpi-ico{background:var(--blue-l);color:var(--blue)}
+.kpi.g .kpi-ico{background:var(--green-l);color:var(--green)}
+.kpi.a .kpi-ico{background:var(--amber-l);color:var(--amber)}
+.kpi.r .kpi-ico{background:var(--red-l);color:var(--red)}
+.kpi.p .kpi-ico{background:var(--purple-l);color:var(--purple)}
+.kpi-val{font-size:23px;font-weight:800;letter-spacing:-.03em;line-height:1;color:var(--navy)}
+.kpi-foot{font-family:var(--mono);font-size:9px;color:var(--dim);margin-top:.3rem}
+.kpi-bar{height:3px;border-radius:2px;background:rgba(0,0,0,.08);margin-top:.55rem;overflow:hidden}
+.kpi-fill{height:100%;border-radius:2px;transition:width .7s cubic-bezier(.4,0,.2,1)}
+.kpi.b .kpi-fill{background:var(--blue)}
+.kpi.g .kpi-fill{background:var(--green)}
+.kpi.a .kpi-fill{background:var(--amber)}
+.kpi.r .kpi-fill{background:var(--red)}
+.kpi.p .kpi-fill{background:var(--purple)}
+
+/* CARDS */
+.card{background:var(--surf);border:1px solid var(--bord);border-radius:var(--r);padding:.9rem 1rem}
+.card-ttl{font-size:12px;font-weight:700;color:var(--navy)}
+.card-sub{font-family:var(--mono);font-size:9px;color:var(--dim);margin:.12rem 0 .65rem}
+
+/* GRID */
+.g2{display:grid;grid-template-columns:1.5fr 1fr;gap:8px;margin-bottom:8px}
+.gfull{margin-bottom:8px}
+
+/* LEGEND */
+.leg{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:.55rem}
+.li{display:flex;align-items:center;gap:4px;font-family:var(--mono);font-size:9px;color:var(--muted)}
+.ld{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+
+/* TECH CARDS */
+.tec-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:8px}
+.tec-card{background:var(--surf);border:1px solid var(--bord);border-radius:var(--r);padding:.8rem;position:relative;overflow:hidden;cursor:pointer;transition:all var(--tr)}
+.tec-card.active-tec{border-color:var(--navy);box-shadow:0 0 0 2px var(--navy)}
+.tec-card:hover{border-color:var(--bord2);box-shadow:0 2px 10px rgba(0,0,0,.07)}
+.tec-bar{position:absolute;top:0;left:0;right:0;height:4px;border-radius:var(--r) var(--r) 0 0}
+.tec-head{display:flex;align-items:flex-start;justify-content:space-between;margin:.35rem 0 .6rem}
+.tec-name{font-size:11px;font-weight:700;color:var(--navy);padding-top:2px}
+.code-tag{font-family:var(--mono);font-size:8px;font-weight:500;color:var(--muted);background:var(--surf2);border:1px solid var(--bord);border-radius:3px;padding:1px 5px;margin-left:4px;vertical-align:middle;display:inline-block}
+.tec-badges{display:flex;gap:3px;flex-wrap:wrap;margin-top:2px}
+.tec-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:.28rem}
+.tec-lbl{font-family:var(--mono);font-size:8px;text-transform:uppercase;letter-spacing:.06em;color:var(--dim)}
+.tec-val{font-family:var(--mono);font-size:10px;font-weight:500;color:var(--text)}
+.tec-pbar{height:5px;border-radius:3px;background:var(--bord);overflow:hidden;margin-top:.45rem}
+.tec-pfill{height:100%;border-radius:3px;transition:width .6s cubic-bezier(.4,0,.2,1)}
+.tec-pct-lbl{font-family:var(--mono);font-size:9px;font-weight:600;text-align:right;margin-top:.22rem}
+
+/* BADGES */
+.badge{display:inline-block;font-family:var(--mono);font-size:8px;font-weight:500;padding:2px 5px;border-radius:3px}
+.ok{background:var(--green-l);color:#15803d}
+.warn{background:var(--amber-l);color:#b45309}
+.bad{background:var(--red-l);color:#b91c1c}
+.neu{background:var(--surf2);color:var(--muted)}
+.vac-badge{background:var(--teal-l);color:var(--teal);font-family:var(--mono);font-size:8px;font-weight:500;padding:2px 5px;border-radius:3px;display:inline-flex;align-items:center;gap:3px}
+.inc-badge{background:#ede9fe;color:#7c3aed;font-family:var(--mono);font-size:8px;font-weight:500;padding:2px 5px;border-radius:3px}
+.na-badge{background:var(--surf2);color:var(--dim);font-family:var(--mono);font-size:8px;padding:2px 5px;border-radius:3px}
+
+/* MBAR */
+.mbar{display:flex;align-items:center;gap:3px;justify-content:flex-end}
+.mtrack{width:36px;height:4px;border-radius:2px;background:var(--bord);overflow:hidden;flex-shrink:0}
+.mfill{height:100%;border-radius:2px}
+
+/* TABLE */
+.tbl-wrap{overflow-x:auto;border-radius:var(--r);border:1px solid var(--bord);margin-bottom:8px;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;font-size:11px;min-width:1100px}
+thead th{background:var(--navy);color:#fff;font-family:var(--mono);font-size:8px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;padding:8px 10px;text-align:right;white-space:nowrap}
+thead th:first-child{text-align:left;padding-left:12px;width:160px}
+thead th.gb{background:#1e3a8a}
+thead th.gg{background:#14532d}
+thead th.gp{background:#4c1d95}
+thead th.ga{background:#78350f}
+thead th.gt{background:#134e4a}
+tbody tr{border-bottom:1px solid var(--bord);transition:background .1s}
+tbody tr:last-child{border-bottom:none}
+tbody tr:nth-child(even){background:var(--surf2)}
+tbody tr:hover{background:#e8f4fd}
+tbody tr.tec-hi{background:#eff6ff!important;border-left:3px solid var(--blue)}
+tbody td{padding:7px 10px;text-align:right;font-family:var(--mono);font-size:10px;color:var(--muted);white-space:nowrap}
+tbody td:first-child{text-align:left;font-family:var(--sans);font-weight:600;font-size:11px;color:var(--navy);padding-left:12px}
+tfoot tr{background:var(--navy)}
+tfoot td{padding:7px 9px;text-align:right;font-family:var(--mono);font-size:10px;font-weight:600;color:#93c5fd}
+tfoot td:first-child{text-align:left;padding-left:12px;color:#fff}
+
+/* FOOTER */
+.footer{margin-top:1.75rem;padding-top:.9rem;border-top:1px solid var(--bord);display:flex;flex-wrap:wrap;justify-content:space-between;gap:.75rem}
+.footer p{font-family:var(--mono);font-size:9px;color:var(--dim);line-height:1.7}
+.fleg{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.fli{display:flex;align-items:center;gap:4px;font-family:var(--mono);font-size:9px;color:var(--muted)}
+.fsq{width:10px;height:10px;border-radius:3px}
+
+/* RESPONSIVE */
+@media(max-width:900px){.kpi-row{grid-template-columns:repeat(3,1fr)}.g2{grid-template-columns:1fr}.tec-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){
+  .kpi-row{grid-template-columns:repeat(2,1fr)}.kpi:last-child{grid-column:span 2}
+  .hdr-meta{display:none}.tec-grid{grid-template-columns:1fr 1fr}
+  .hdr-ttl{font-size:16px}.filter-bar{gap:4px}.ftab{font-size:9px;padding:5px 9px}
+
+}
+@media(max-width:400px){.tec-grid{grid-template-columns:1fr}.page{padding:.75rem .75rem 3rem}}
+
+/* ANIMATION */
+.kpi{animation:fu .3s both}
+.kpi:nth-child(1){animation-delay:.04s}.kpi:nth-child(2){animation-delay:.08s}
+.kpi:nth-child(3){animation-delay:.12s}.kpi:nth-child(4){animation-delay:.16s}.kpi:nth-child(5){animation-delay:.2s}
+@keyframes fu{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- HEADER -->
+<div class="hdr">
+  <div class="hdr-top">
+    <div>
+      <div class="hdr-brand">
+        <div class="hdr-logo"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div>
+        <div><div class="hdr-ttl">Reporte Feedbacks — Workshop</div><div class="hdr-sub">Indicadores de desempeño · Source PC 9 · 7 técnicos</div></div>
+      </div>
+      <div class="pills">
+        <span class="pill hi">Enero 2026</span><span class="pill hi">Febrero 2026</span><span class="pill hi">Marzo 2026</span><span class="pill hi">Abril 2026</span>
+        <span class="pill">Meta: 160 h/técnico</span>
+        <span class="pill vac">
+          <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>
+          = vac./adm.
+        </span>
+      </div>
+    </div>
+    <div class="hdr-meta">Período<br><b>Ene — Abr 2026</b><br>Cierre: 31/01 · 28/02 · 31/03 · 30/04</div>
+  </div>
+</div>
+
+<!-- FILTER BAR -->
+<div class="filter-bar">
+  <span class="flbl">Mes:</span>
+  <div class="fg" id="monFilt">
+    <span class="ftab on" data-mon="all">Todos</span>
+    <span class="ftab" data-mon="0">Enero</span>
+    <span class="ftab" data-mon="1">Febrero</span>
+    <span class="ftab" data-mon="2">Marzo</span>
+    <span class="ftab" data-mon="3">Abril</span>
+  </div>
+  <div class="divr"></div>
+  <span class="flbl">Técnico:</span>
+  <div class="fg" id="tecFilt">
+    <span class="ftab on" data-tec="all">Todos</span>
+  </div>
+</div>
+
+<!-- KPIs -->
+<div class="sec"><h2>Resumen</h2></div>
+<div class="kpi-row">
+  <div class="kpi b"><div class="kpi-accent"></div>
+    <div class="kpi-top"><span class="kpi-lbl">Horas ejecutadas</span>
+      <div class="kpi-ico"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+    </div>
+    <div class="kpi-val" id="kv-h">—</div>
+    <div class="kpi-foot" id="kv-h-s">—</div>
+    <div class="kpi-bar"><div class="kpi-fill" id="kv-h-b"></div></div>
+  </div>
+  <div class="kpi g"><div class="kpi-accent"></div>
+    <div class="kpi-top"><span class="kpi-lbl">% Cumplimiento</span>
+      <div class="kpi-ico"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+    </div>
+    <div class="kpi-val" id="kv-p">—</div>
+    <div class="kpi-foot" id="kv-p-s">promedio del equipo</div>
+    <div class="kpi-bar"><div class="kpi-fill" id="kv-p-b"></div></div>
+  </div>
+  <div class="kpi a"><div class="kpi-accent"></div>
+    <div class="kpi-top"><span class="kpi-lbl">Horas faltantes</span>
+      <div class="kpi-ico"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+    </div>
+    <div class="kpi-val" id="kv-f">—</div>
+    <div class="kpi-foot">160h − ejec. − vac.</div>
+    <div class="kpi-bar"><div class="kpi-fill" id="kv-f-b"></div></div>
+  </div>
+  <div class="kpi p"><div class="kpi-accent"></div>
+    <div class="kpi-top"><span class="kpi-lbl">Prom. h/téc/mes</span>
+      <div class="kpi-ico"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
+    </div>
+    <div class="kpi-val" id="kv-a">—</div>
+    <div class="kpi-foot" id="kv-a-s">meses activos</div>
+    <div class="kpi-bar"><div class="kpi-fill" id="kv-a-b"></div></div>
+  </div>
+  <div class="kpi r"><div class="kpi-accent"></div>
+    <div class="kpi-top"><span class="kpi-lbl">Feedbacks</span>
+      <div class="kpi-ico"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
+    </div>
+    <div class="kpi-val" id="kv-d">—</div>
+    <div class="kpi-foot" id="kv-d-s">deliveries</div>
+    <div class="kpi-bar"><div class="kpi-fill" id="kv-d-b"></div></div>
+  </div>
+</div>
+
+<!-- TECH CARDS -->
+<div class="sec"><h2 id="tec-sec-lbl">Detalle por técnico</h2></div>
+<div class="tec-grid" id="tecCards"></div>
+
+<!-- TABLE -->
+<div class="sec"><h2 id="tbl-sec-lbl">Tabla consolidada</h2></div>
+<div class="tbl-wrap">
+  <table><thead id="tbl-head"></thead><tbody id="tbl-body"></tbody><tfoot id="tbl-foot"></tfoot></table>
+</div>
+
+<!-- CHARTS -->
+<div class="sec"><h2>Gráficos</h2></div>
+<div class="g2">
+  <div class="card">
+    <div class="card-ttl">Horas ejecutadas al cierre de mes</div>
+    <div class="card-sub" id="ch1-sub">todos los meses · línea roja = meta 160 h</div>
+    <div class="leg" id="leg1"></div>
+    <div style="position:relative;height:230px"><canvas id="ch1" role="img" aria-label="Horas por técnico"></canvas></div>
+  </div>
+  <div class="card">
+    <div class="card-ttl">Total horas ejecutadas por mes (Workshop)</div>
+    <div class="card-sub">acumulado del equipo · meta = 1,120 h/mes</div>
+    <div style="position:relative;height:230px"><canvas id="ch2" role="img" aria-label="Total horas por mes"></canvas></div>
+  </div>
+</div>
+<div class="g2">
+  <div class="card">
+    <div class="card-ttl">% Cumplimiento por técnico</div>
+    <div class="card-sub" id="ch3-sub">meses activos · meta 100% · alerta 85%</div>
+    <div style="position:relative;height:200px"><canvas id="ch3" role="img" aria-label="% cumplimiento por técnico"></canvas></div>
+  </div>
+  <div class="card">
+    <div class="card-ttl">Feedbacks (deliveries) por técnico</div>
+    <div class="card-sub" id="ch4-sub">cantidad de reportes</div>
+    <div class="leg" id="leg4"></div>
+    <div style="position:relative;height:200px"><canvas id="ch4" role="img" aria-label="Deliveries por técnico"></canvas></div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <p>Reporte Feedbacks Workshop · Source PC 9 · Enero–Abril 2026 · Meta: 160 h/técnico<br>
+  Horas faltantes = 160h − Horas ejecutadas − Vac./Adm. · Indicadores calculados solo sobre meses activos</p>
+  <div class="fleg">
+    <span class="fli"><span class="fsq" style="background:var(--green-l);border:1px solid var(--green-m)"></span>Cumple ≥ 85%</span>
+    <span class="fli"><span class="fsq" style="background:var(--amber-l);border:1px solid var(--amber-m)"></span>Alerta 60–84%</span>
+    <span class="fli"><span class="fsq" style="background:var(--red-l);border:1px solid var(--red-m)"></span>Crítico &lt;60%</span>
+    <span class="fli"><span style="background:var(--teal-l);color:var(--teal);padding:1px 5px;border-radius:3px;font-size:9px;font-family:var(--mono);display:inline-flex;align-items:center;gap:3px"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg> vac.</span> vac./adm.</span>
+    <span class="fli"><span style="background:#ede9fe;color:#7c3aed;padding:1px 5px;border-radius:3px;font-size:9px;font-family:var(--mono)">Inc. Feb</span> ingresó en feb.</span>
+  </div>
+</div>
+
+</div>
+
+<script>
+const META=160;
+const MESES=["Enero","Febrero","Marzo","Abril"];
+const TCOLORS=["#2563eb","#16a34a","#d97706","#dc2626","#7c3aed","#0d9488","#db2777"];
+const MCOLORS=["#1d4ed8","#15803d","#b45309","#0369a1"];
+const MBGS=["#dbeafe","#dcfce7","#fef3c7","#e0f2fe"];
+
+// start_month: first active month index (0=Ene, 1=Feb)
+// vac: vacation hours per month [Ene, Feb, Mar, Abr]
+const DATA=[
+  {name:"Alexander Balbin",  abbr:"A. Balbin",     code:"8002", start:0, vac:[40,0,0,24],
+   months:[{h:132,d:22},{h:128,d:21},{h:176,d:32},{h:129,d:17}]},
+  {name:"Carlos Aguirre",    abbr:"C. Aguirre",    code:"8007", start:0, vac:[0,0,80,28],
+   months:[{h:140,d:32},{h:153.5,d:30},{h:84,d:16},{h:114,d:20}]},
+  {name:"Ever Zegarra",      abbr:"E. Zegarra",    code:"8064", start:1, vac:[0,0,0,20],
+   months:[{h:0,d:0},{h:124.5,d:26},{h:150.5,d:35},{h:140,d:35}]},
+  {name:"Juan Espinoza",     abbr:"J. Espinoza",   code:"8018", start:0, vac:[16,0,0,20],
+   months:[{h:125.5,d:30},{h:105.5,d:35},{h:112.5,d:23},{h:133.5,d:22}]},
+  {name:"Julio Pariona",     abbr:"J. Pariona",    code:"8033", start:0, vac:[0,0,0,20],
+   months:[{h:130.5,d:34},{h:80,d:17},{h:125.5,d:31},{h:131,d:38}]},
+  {name:"Marco de la Cruz",  abbr:"M. de la Cruz", code:"8022", start:0, vac:[96,0,0,20],
+   months:[{h:73,d:11},{h:131.5,d:31},{h:165.5,d:43},{h:147.5,d:39}]},
+  {name:"Segundo Torres",    abbr:"S. Torres",     code:"8065", start:1, vac:[0,0,0,20],
+   months:[{h:0,d:0},{h:57,d:11},{h:154,d:23},{h:138.5,d:39}]},
+];
+
+const TEAM=[
+  {label:"Enero",   horas:601.0,  del:129},
+  {label:"Febrero", horas:780.0,  del:171},
+  {label:"Marzo",   horas:968.0,  del:203},
+  {label:"Abril",   horas:933.5,  del:210},
+];
+
+let activeMon='all', activeTec='all';
+
+// ── helpers ─────────────────────────────────────────────────────────────
+function short(n){
+  const t=DATA.find(d=>d.name===n);
+  return t?t.abbr:n;
+}
+function sc(pct){return pct>=85?'#16a34a':pct>=60?'#d97706':'#dc2626'}
+function sb(pct){return pct>=85?'#dcfce7':pct>=60?'#fef3c7':'#fee2e2'}
+function bxClass(pct){return pct>=85?'ok':pct>=60?'warn':'bad'}
+function bxLabel(pct){return pct>=85?'Cumple':pct>=60?'Alerta':'Crítico'}
+function bx(pct){return`<span class="badge ${bxClass(pct)}">${bxLabel(pct)}</span>`}
+function faltBx(v){
+  if(v<=0) return`<span class="badge ok">${v.toFixed(1)}</span>`;
+  if(v<40) return`<span class="badge warn">+${v.toFixed(1)}</span>`;
+  return`<span class="badge bad">+${v.toFixed(1)}</span>`;
+}
+function mbar(pct,color){
+  const w=Math.min(100,Math.max(0,pct));
+  return`<div class="mbar"><span style="font-family:var(--mono);font-size:9px;color:var(--muted);min-width:26px;text-align:right">${pct.toFixed(0)}%</span><div class="mtrack"><div class="mfill" style="width:${w}%;background:${color}"></div></div></div>`;
+}
+function hasVac(t, mi){return t.vac[mi]>0}
+function vacIcon(){return`<svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>`}
+
+// Active month indices for a tech (respects start month)
+function techActiveIdxs(t){
+  const sel = activeMon==='all'?[0,1,2]:[parseInt(activeMon)];
+  return sel.filter(i=>i>=t.start);
+}
+
+// Aggregate a tech's data for active+selected months
+function aggTec(t){
+  const idxs=techActiveIdxs(t);
+  if(idxs.length===0) return null;
+  let h=0,d=0,v=0;
+  idxs.forEach(i=>{h+=t.months[i].h;d+=t.months[i].d;v+=t.vac[i]});
+  const falt=idxs.length*META - h - v;
+  // pct: display % (horas ejecutadas only)
+  const avgPct=idxs.map(i=>t.months[i].h/META*100).reduce((a,b)=>a+b,0)/idxs.length;
+  // adjPct: status % (horas + vacaciones) — used for semáforo/color only
+  const avgAdjPct=idxs.map(i=>(t.months[i].h+t.vac[i])/META*100).reduce((a,b)=>a+b,0)/idxs.length;
+  return{h:Math.round(h*10)/10,d,v,falt:Math.round(falt*10)/10,
+         pct:Math.round(avgPct*10)/10,adjPct:Math.round(avgAdjPct*10)/10,n:idxs.length};
+}
+
+function getActiveTecs(){return activeTec==='all'?DATA:DATA.filter(t=>t.name===activeTec)}
+
+// ── Tech filter tabs ───────────────────────────────────────────────────
+(function(){
+  const c=document.getElementById('tecFilt');
+  DATA.forEach(t=>{
+    const sp=document.createElement('span');
+    sp.className='ftab';sp.dataset.tec=t.name;
+    sp.textContent=t.code+' · '+t.abbr;
+    if(t.start>0) sp.textContent+=' ✦';
+    c.appendChild(sp);
+  });
+})();
+
+// ── Events ─────────────────────────────────────────────────────────────
+document.getElementById('monFilt').addEventListener('click',e=>{
+  if(!e.target.dataset.mon) return;
+  document.querySelectorAll('#monFilt .ftab').forEach(t=>t.classList.remove('on'));
+  e.target.classList.add('on'); activeMon=e.target.dataset.mon; render();
+});
+document.getElementById('tecFilt').addEventListener('click',e=>{
+  if(!e.target.dataset.tec) return;
+  document.querySelectorAll('#tecFilt .ftab').forEach(t=>t.classList.remove('on'));
+  e.target.classList.add('on'); activeTec=e.target.dataset.tec; render();
+});
+
+// ── Charts ─────────────────────────────────────────────────────────────
+let ch1,ch2,ch3,ch4;
+
+function initCh2(){
+  // Linear regression for trend line
+  const ys=TEAM.map(t=>t.horas);
+  const n=ys.length;
+  const xs=[0,1,2];
+  const mx=xs.reduce((a,b)=>a+b,0)/n;
+  const my=ys.reduce((a,b)=>a+b,0)/n;
+  const slope=xs.reduce((acc,x,i)=>acc+(x-mx)*(ys[i]-my),0)/xs.reduce((acc,x)=>acc+(x-mx)**2,0);
+  const intercept=my-slope*mx;
+  const trend=xs.map(x=>Math.round((slope*x+intercept)*10)/10);
+
+  ch2=new Chart(document.getElementById('ch2'),{
+    type:'bar',
+    data:{labels:TEAM.map(t=>t.label),datasets:[
+      {label:'Horas equipo',data:TEAM.map(t=>t.horas),backgroundColor:MBGS,borderColor:MCOLORS,borderWidth:2,borderRadius:6},
+      {type:'line',label:'Meta (1,120h)',data:[1120,1120,1120,1120],borderColor:'#dc2626',borderWidth:2,borderDash:[5,4],pointRadius:0,fill:false,tension:0},
+      {type:'line',label:'Tendencia',data:trend,borderColor:'#7c3aed',borderWidth:2.5,borderDash:[0],pointRadius:5,pointBackgroundColor:'#7c3aed',pointBorderColor:'#fff',pointBorderWidth:2,fill:false,tension:0,order:-1}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{
+        legend:{display:true,position:'bottom',labels:{font:{size:9},boxWidth:10,padding:12,color:'#6b6560',
+          filter:item=>item.text!=='Horas equipo'}},
+        tooltip:{callbacks:{label:c=>`${c.dataset.label}: ${c.parsed.y.toLocaleString()} h`}}
+      },
+      scales:{x:{grid:{display:false},ticks:{font:{size:10},color:'#6b6560'}},
+              y:{min:0,max:1300,grid:{color:'#f0ede8'},ticks:{font:{size:9},color:'#6b6560',callback:v=>v.toLocaleString()+' h'}}}}
+  });
+}
+
+function updateCh1(){
+  const tecs=getActiveTecs();
+  const labels=tecs.map(t=>short(t.name));
+  let datasets;
+  const isAll=activeMon==='all';
+
+  if(isAll){
+    datasets=MESES.map((m,i)=>({
+      label:m,
+      data:tecs.map(t=>i>=t.start?t.months[i].h:null),
+      backgroundColor:MBGS[i],borderColor:MCOLORS[i],borderWidth:2,borderRadius:4,borderSkipped:false
+    }));
+    datasets.push({type:'line',label:'Meta 160h',data:Array(tecs.length).fill(META),
+      borderColor:'#dc2626',borderWidth:2,borderDash:[5,4],pointRadius:0,fill:false,tension:0,order:0});
+    document.getElementById('leg1').innerHTML=
+      MESES.map((m,i)=>`<span class="li"><span class="ld" style="background:${MCOLORS[i]}"></span>${m}</span>`).join('')+
+      `<span class="li"><span class="ld" style="background:#dc2626;height:3px"></span>Meta 160h</span>`;
+  } else {
+    const mi=parseInt(activeMon);
+    datasets=[{
+      label:MESES[mi],
+      data:tecs.map(t=>mi>=t.start?t.months[mi].h:null),
+      backgroundColor:tecs.map(t=>mi>=t.start?sb((t.months[mi].h+t.vac[mi])/META*100):'#f0ede8'),
+      borderColor:tecs.map(t=>mi>=t.start?sc((t.months[mi].h+t.vac[mi])/META*100):'#c8c4be'),
+      borderWidth:2,borderRadius:4,borderSkipped:false
+    },{type:'line',label:'Meta 160h',data:Array(tecs.length).fill(META),
+      borderColor:'#dc2626',borderWidth:2,borderDash:[5,4],pointRadius:0,fill:false,tension:0,order:0}];
+    document.getElementById('leg1').innerHTML=
+      `<span class="li"><span class="ld" style="background:#dcfce7;border:1px solid #86efac"></span>≥85% Cumple</span>`+
+      `<span class="li"><span class="ld" style="background:#fef3c7;border:1px solid #fcd34d"></span>60-84% Alerta</span>`+
+      `<span class="li"><span class="ld" style="background:#fee2e2;border:1px solid #fca5a5"></span>&lt;60% Crítico</span>`;
+  }
+  document.getElementById('ch1-sub').textContent=(isAll?'todos los meses':MESES[parseInt(activeMon)])+
+    ' · '+(activeTec==='all'?'7 técnicos':short(activeTec))+'';
+
+  if(!ch1){
+    ch1=new Chart(document.getElementById('ch1'),{
+      type:'bar',data:{labels,datasets},
+      options:{responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{display:false},tooltip:{callbacks:{
+          label:c=>c.parsed.y===null?'No activo ese mes':`${c.dataset.label}: ${c.parsed.y} h`}}},
+        scales:{x:{grid:{display:false},ticks:{font:{size:9},color:'#6b6560',maxRotation:35}},
+                y:{min:0,max:210,grid:{color:'#f0ede8'},ticks:{font:{size:9},color:'#6b6560',callback:v=>v+' h'}}}}
+    });
+  } else {ch1.data.labels=labels;ch1.data.datasets=datasets;ch1.update('none');}
+}
+
+function updateCh3(){
+  const tecs=getActiveTecs();
+  const isAll=activeMon==='all';
+  let labels,datasets;
+
+  if(isAll){
+    labels=MESES;
+    datasets=tecs.map((t,li)=>({
+      label:short(t.name),
+      data:MESES.map((m,i)=>i>=t.start?Math.round(t.months[i].h/META*1000)/10:null),
+      borderColor:TCOLORS[DATA.indexOf(t)],backgroundColor:'transparent',
+      borderWidth:2,pointRadius:4,pointBackgroundColor:TCOLORS[DATA.indexOf(t)],
+      tension:.3,spanGaps:false
+    }));
+    datasets.push({label:'Meta 100%',data:[100,100,100,100],borderColor:'#dc2626',borderWidth:1.5,borderDash:[5,3],pointRadius:0,fill:false,tension:0});
+    datasets.push({label:'Alerta 85%',data:[85,85,85,85],borderColor:'#d97706',borderWidth:1,borderDash:[3,3],pointRadius:0,fill:false,tension:0});
+    document.getElementById('ch3-sub').textContent='meses activos · meta 100% · alerta 85%';
+  } else {
+    const mi=parseInt(activeMon);
+    labels=tecs.map(t=>short(t.name));
+    datasets=[{
+      type:'bar',label:'% Cumplimiento',
+      data:tecs.map(t=>mi>=t.start?Math.round(t.months[mi].h/META*1000)/10:null),
+      backgroundColor:tecs.map(t=>mi>=t.start?sb((t.months[mi].h+t.vac[mi])/META*100):'#f0ede8'),
+      borderColor:tecs.map(t=>mi>=t.start?sc((t.months[mi].h+t.vac[mi])/META*100):'#c8c4be'),
+      borderWidth:2,borderRadius:4,borderSkipped:false
+    },{type:'line',label:'Meta 100%',data:Array(tecs.length).fill(100),borderColor:'#dc2626',borderWidth:1.5,borderDash:[5,3],pointRadius:0,fill:false,tension:0},
+    {type:'line',label:'Alerta 85%',data:Array(tecs.length).fill(85),borderColor:'#d97706',borderWidth:1,borderDash:[3,3],pointRadius:0,fill:false,tension:0}];
+    document.getElementById('ch3-sub').textContent=MESES[mi]+' · vs meta 100%';
+  }
+
+  if(!ch3){
+    ch3=new Chart(document.getElementById('ch3'),{type:'line',data:{labels,datasets},
+      options:{responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{display:isAll,position:'bottom',labels:{font:{size:8},boxWidth:8,padding:8,color:'#6b6560'}},
+                 tooltip:{callbacks:{label:c=>c.parsed.y===null?'No activo ese mes':`${c.dataset.label}: ${c.parsed.y}%`}}},
+        scales:{x:{grid:{display:false},ticks:{font:{size:9},color:'#6b6560',maxRotation:35}},
+                y:{min:0,max:125,grid:{color:'#f0ede8'},ticks:{font:{size:9},color:'#6b6560',callback:v=>v+'%'}}}}
+    });
+  } else {ch3.data.labels=labels;ch3.data.datasets=datasets;ch3.options.plugins.legend.display=isAll;ch3.update('none');}
+}
+
+function updateCh4(){
+  const tecs=getActiveTecs();
+  const isAll=activeMon==='all';
+  const labels=tecs.map(t=>short(t.name));
+  let datasets;
+
+  if(isAll){
+    datasets=MESES.map((m,i)=>({
+      label:m,data:tecs.map(t=>i>=t.start?t.months[i].d:null),
+      backgroundColor:MBGS[i],borderColor:MCOLORS[i],borderWidth:2,borderRadius:4
+    }));
+    document.getElementById('leg4').innerHTML=MESES.map((m,i)=>`<span class="li"><span class="ld" style="background:${MCOLORS[i]}"></span>${m}</span>`).join('');
+    document.getElementById('ch4-sub').textContent='todos los meses activos';
+  } else {
+    const mi=parseInt(activeMon);
+    datasets=[{label:MESES[mi],data:tecs.map(t=>mi>=t.start?t.months[mi].d:null),
+      backgroundColor:MBGS[mi],borderColor:MCOLORS[mi],borderWidth:2,borderRadius:4}];
+    document.getElementById('leg4').innerHTML=`<span class="li"><span class="ld" style="background:${MCOLORS[mi]}"></span>${MESES[mi]}</span>`;
+    document.getElementById('ch4-sub').textContent=MESES[mi];
+  }
+
+  if(!ch4){
+    ch4=new Chart(document.getElementById('ch4'),{type:'bar',data:{labels,datasets},
+      options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.parsed.x===null?'No activo ese mes':`${c.dataset.label}: ${c.parsed.x} reportes`}}},
+        scales:{x:{grid:{color:'#f0ede8'},ticks:{font:{size:9},color:'#6b6560'}},
+                y:{grid:{display:false},ticks:{font:{size:9},color:'#6b6560'}}}}
+    });
+  } else {ch4.data.labels=labels;ch4.data.datasets=datasets;ch4.update('none');}
+}
+
+function updateCh2Highlight(){
+  if(!ch2) return;
+  const opaq=TEAM.map((_,i)=>activeMon==='all'||parseInt(activeMon)===i);
+  ch2.data.datasets[0].backgroundColor=MBGS.map((c,i)=>opaq[i]?c:c+'55');
+  ch2.data.datasets[0].borderColor=MCOLORS.map((c,i)=>opaq[i]?c:c+'55');
+  ch2.update('none');
+}
+
+// ── KPIs ───────────────────────────────────────────────────────────────
+function renderKPIs(){
+  const tecs=getActiveTecs();
+  let totH=0,totD=0,allPct=[],allH=[],totFalt=0,totMes=0;
+  tecs.forEach(t=>{
+    const idxs=techActiveIdxs(t);
+    if(idxs.length===0) return;
+    let th=0,td=0,tv=0;
+    idxs.forEach(i=>{th+=t.months[i].h;td+=t.months[i].d;tv+=t.vac[i];});
+    totH+=th;totD+=td;
+    const pct=th/(idxs.length*META)*100;
+    allPct.push(pct);allH.push(th/idxs.length);
+    totFalt+=(idxs.length*META-th-tv);
+    totMes+=idxs.length;
+  });
+  const avgPct=allPct.length?allPct.reduce((a,b)=>a+b,0)/allPct.length:0;
+  const avgH=allH.length?allH.reduce((a,b)=>a+b,0)/allH.length:0;
+  const n=tecs.length;
+  const activeCount=tecs.filter(t=>techActiveIdxs(t).length>0).length;
+  const monLabel=activeMon==='all'?'3 meses':MESES[parseInt(activeMon)];
+
+  document.getElementById('kv-h').textContent=totH.toFixed(0)+' h';
+  document.getElementById('kv-h-s').textContent=`${monLabel} · ${activeCount} técnico${activeCount>1?'s':''}`;
+  document.getElementById('kv-h-b').style.width=Math.min(100,totH/(META*totMes)*100)+'%';
+  document.getElementById('kv-p').textContent=avgPct.toFixed(0)+'%';
+  document.getElementById('kv-p-s').textContent='promedio del equipo';
+  document.getElementById('kv-p-b').style.width=Math.min(100,avgPct)+'%';
+  document.getElementById('kv-f').textContent=(totFalt>=0?'+':'')+totFalt.toFixed(0)+' h';
+  document.getElementById('kv-f-b').style.width=Math.min(100,Math.abs(totFalt)/(META*totMes)*100)+'%';
+  document.getElementById('kv-a').textContent=avgH.toFixed(1)+' h';
+  document.getElementById('kv-a-s').textContent='promedio mensual';
+  document.getElementById('kv-a-b').style.width=Math.min(100,avgH/META*100)+'%';
+  document.getElementById('kv-d').textContent=totD;
+  document.getElementById('kv-d-s').textContent=`deliveries · ${monLabel}`;
+  document.getElementById('kv-d-b').style.width=Math.min(100,totD/(50*n)*100)+'%';
+}
+
+// ── Tech cards ─────────────────────────────────────────────────────────
+function renderTecCards(){
+  const tecs=getActiveTecs();
+  const isAll=activeMon==='all';
+  const mesLbl=isAll?'Enero – Marzo':MESES[parseInt(activeMon)];
+  document.getElementById('tec-sec-lbl').textContent=`Detalle por técnico · ${mesLbl}`;
+
+  document.getElementById('tecCards').innerHTML=tecs.map(t=>{
+    const ti=DATA.indexOf(t);
+    const idxs=techActiveIdxs(t);
+    const isNA=idxs.length===0;
+    const color=TCOLORS[ti];
+
+    // Vacation indicator for selected months
+    const vacMons=isAll?
+      MESES.filter((_,i)=>i>=t.start&&t.vac[i]>0).map(m=>`${m}: ${t.vac[MESES.indexOf(m)]}h`):
+      (parseInt(activeMon)>=t.start&&t.vac[parseInt(activeMon)]>0?[`${MESES[parseInt(activeMon)]}: ${t.vac[parseInt(activeMon)]}h`]:[]);
+
+    let cardContent='';
+    if(isNA){
+      cardContent=`<div style="font-family:var(--mono);font-size:10px;color:var(--dim);padding:.5rem 0">No activo en ${MESES[parseInt(activeMon)]}</div>`;
+    } else {
+      const a=aggTec(t);
+      cardContent=`
+        <div class="tec-row"><span class="tec-lbl">Horas ejec.</span><span class="tec-val">${a.h.toFixed(1)} h</span></div>
+        <div class="tec-row"><span class="tec-lbl">Vac./Adm.</span><span class="tec-val">${a.v>0?`${vacIcon()} ${a.v} h`:'—'}</span></div>
+        <div class="tec-row"><span class="tec-lbl">H. faltantes</span><span class="tec-val" style="color:${a.falt>0?'#dc2626':'#16a34a'}">${a.falt>0?'+':''}${a.falt.toFixed(1)} h</span></div>
+        <div class="tec-row"><span class="tec-lbl">Feedbacks</span><span class="tec-val">${a.d} rep.</span></div>
+        <div class="tec-row"><span class="tec-lbl">Estado</span>${bx(a.adjPct)}</div>
+        <div class="tec-pbar"><div class="tec-pfill" style="width:${Math.min(100,a.adjPct)}%;background:${sc(a.adjPct)}"></div></div>
+        <div class="tec-pct-lbl" style="color:${sc(a.adjPct)}">${a.pct.toFixed(1)}%${a.v>0?` <span style="font-size:8px;opacity:.7">(+vac.)</span>`:''}</div>`;
+    }
+
+    // Badges row
+    const badgesHtml=
+      (t.start>0?`<span class="inc-badge">Inc. Feb</span>`:'') +
+      (vacMons.length>0?`<span class="vac-badge">${vacIcon()} vac.</span>`:'');
+
+    return`<div class="tec-card${activeTec===t.name?' active-tec':''}" data-tec="${t.name}">
+      <div class="tec-bar" style="background:${color}"></div>
+      <div class="tec-head">
+        <div class="tec-name" style="color:${color}">${t.name} <span class="code-tag">${t.code}</span></div>
+        <div class="tec-badges">${badgesHtml}</div>
+      </div>
+      ${cardContent}
+    </div>`;
+  }).join('');
+
+  document.querySelectorAll('.tec-card').forEach(c=>{
+    c.addEventListener('click',()=>{
+      const tn=c.dataset.tec;
+      activeTec=activeTec===tn?'all':tn;
+      document.querySelectorAll('#tecFilt .ftab').forEach(t=>t.classList.remove('on'));
+      document.querySelector(`#tecFilt .ftab[data-tec="${activeTec}"]`).classList.add('on');
+      render();
+    });
+  });
+}
+
+// ── Table ───────────────────────────────────────────────────────────────
+function renderTable(){
+  const tecs=getActiveTecs();
+  const isAll=activeMon==='all';
+  const mesLbl=isAll?'Enero – Marzo':MESES[parseInt(activeMon)];
+  document.getElementById('tbl-sec-lbl').textContent=`Tabla consolidada · ${mesLbl}`;
+  const head=document.getElementById('tbl-head');
+  const body=document.getElementById('tbl-body');
+  const foot=document.getElementById('tbl-foot');
+
+  // VAC icon helper for cell
+  function vi(v){return v>0?` <span class="vac-badge">${vacIcon()} ${v}h</span>`:''}
+  function naCell(){return`<td colspan="1" style="color:var(--dim);text-align:center">—</td>`}
+
+  if(isAll){
+    head.innerHTML=`<tr>
+      <th rowspan="2" style="vertical-align:bottom">Técnico</th>
+      <th colspan="4" class="gb" style="text-align:center">Horas ejecutadas</th><th class="gb">Total</th>
+      <th colspan="4" class="gg" style="text-align:center">% Cumplimiento</th><th class="gg">Prom</th>
+      <th colspan="4" class="gp" style="text-align:center">Horas faltantes</th><th class="gp">Acum.</th>
+      <th colspan="4" class="ga" style="text-align:center">Feedbacks</th><th class="ga">Total</th>
+      <th colspan="4" class="gt" style="text-align:center">Vac./Adm. (h)</th>
+    </tr><tr>
+      <th class="gb">Ene</th><th class="gb">Feb</th><th class="gb">Mar</th><th class="gb">Abr</th><th class="gb">acum.</th>
+      <th class="gg">Ene</th><th class="gg">Feb</th><th class="gg">Mar</th><th class="gg">Abr</th><th class="gg">prom</th>
+      <th class="gp">Ene</th><th class="gp">Feb</th><th class="gp">Mar</th><th class="gp">Abr</th><th class="gp">acum.</th>
+      <th class="ga">Ene</th><th class="ga">Feb</th><th class="ga">Mar</th><th class="ga">Abr</th><th class="ga">total</th>
+      <th class="gt">Ene</th><th class="gt">Feb</th><th class="gt">Mar</th><th class="gt">Abr</th>
+    </tr>`;
+
+    // only sum active months for team totals
+    const teamH=[0,0,0,0],teamD=[0,0,0,0],teamF=[0,0,0,0],teamP=[0,0,0,0],teamV=[0,0,0,0];
+    let teamCntP=[0,0,0,0];
+
+    body.innerHTML=tecs.map(t=>{
+      const ti=DATA.indexOf(t);
+      const hl=activeTec===t.name?' class="tec-hi"':'';
+      // build per-month cells
+      const hCells=MESES.map((_,i)=>{
+        if(i<t.start) return`<td class="na-badge" style="text-align:center;color:var(--dim)">N/A</td>`;
+        teamH[i]+=t.months[i].h;
+        const p=t.months[i].h/META*100;
+        const adj=(t.months[i].h+t.vac[i])/META*100; // adjusted for vacation → drives color
+        return`<td style="color:${sc(adj)};background:${sb(adj)};font-weight:600">${t.months[i].h.toFixed(1)}</td>`;
+      }).join('');
+      const activeH=t.months.filter((_,i)=>i>=t.start).map(m=>m.h);
+      const totH=activeH.reduce((a,b)=>a+b,0);
+
+      const pCells=MESES.map((_,i)=>{
+        if(i<t.start) return`<td style="text-align:center;color:var(--dim)">N/A</td>`;
+        const p=t.months[i].h/META*100;
+        const adj=(t.months[i].h+t.vac[i])/META*100; // adjusted for color
+        teamP[i]+=p; teamCntP[i]++;
+        return`<td>${mbar(p,sc(adj))}</td>`;
+      }).join('');
+      const activeP=t.months.filter((_,i)=>i>=t.start).map(m=>m.h/META*100);
+      const avgP=activeP.reduce((a,b)=>a+b,0)/activeP.length;
+
+      const fCells=MESES.map((_,i)=>{
+        if(i<t.start) return`<td style="text-align:center;color:var(--dim)">N/A</td>`;
+        const f=META-t.months[i].h-t.vac[i];
+        teamF[i]+=f;
+        return`<td>${faltBx(f)}</td>`;
+      }).join('');
+      const totF=MESES.reduce((acc,_,i)=>i>=t.start?acc+(META-t.months[i].h-t.vac[i]):acc,0);
+
+      const dCells=MESES.map((_,i)=>{
+        if(i<t.start) return`<td style="text-align:center;color:var(--dim)">N/A</td>`;
+        teamD[i]+=t.months[i].d;
+        return`<td>${t.months[i].d}</td>`;
+      }).join('');
+      const totD=t.months.filter((_,i)=>i>=t.start).reduce((a,m)=>a+m.d,0);
+
+      const vCells=MESES.map((_,i)=>{
+        if(i<t.start) return`<td style="text-align:center;color:var(--dim)">N/A</td>`;
+        teamV[i]+=t.vac[i];
+        return`<td>${t.vac[i]>0?`<span class="vac-badge">${vacIcon()} ${t.vac[i]}</span>`:'-'}</td>`;
+      }).join('');
+
+      return`<tr${hl} style="border-left:3px solid ${TCOLORS[ti]}">
+        <td>${t.name} <span class="code-tag">${t.code}</span>${t.start>0?` <span class="inc-badge">Inc. Feb</span>`:''}</td>
+        ${hCells}<td style="color:#1d4ed8;font-weight:700">${totH.toFixed(1)}</td>
+        ${pCells}<td style="color:#15803d;font-weight:700">${avgP.toFixed(0)}%</td>
+        ${fCells}<td style="font-weight:700">${totF.toFixed(1)}</td>
+        ${dCells}<td style="color:#b45309;font-weight:700">${totD}</td>
+        ${vCells}
+      </tr>`;
+    }).join('');
+
+    foot.innerHTML=`<tr>
+      <td>Total / Prom.</td>
+      ${[0,1,2,3].map(i=>`<td>${teamH[i].toFixed(1)}</td>`).join('')}<td>${teamH.reduce((a,b)=>a+b,0).toFixed(1)}</td>
+      ${[0,1,2,3].map(i=>`<td>${teamCntP[i]?((teamP[i]/teamCntP[i]).toFixed(0)+'%'):'—'}</td>`).join('')}<td>${(teamP.reduce((a,b)=>a+b,0)/teamCntP.reduce((a,b)=>a+b,0)).toFixed(0)}%</td>
+      ${[0,1,2,3].map(i=>`<td>${teamF[i].toFixed(1)}</td>`).join('')}<td>${teamF.reduce((a,b)=>a+b,0).toFixed(1)}</td>
+      ${[0,1,2,3].map(i=>`<td>${teamD[i]}</td>`).join('')}<td>${teamD.reduce((a,b)=>a+b,0)}</td>
+      ${[0,1,2,3].map(i=>`<td>${teamV[i]>0?teamV[i]:'-'}</td>`).join('')}
+    </tr>`;
+
+  } else {
+    const mi=parseInt(activeMon);
+    head.innerHTML=`<tr>
+      <th style="text-align:left;padding-left:12px">Técnico</th>
+      <th class="gb">Horas ejec.</th><th class="gg">% Cumpl.</th>
+      <th class="gp">H. Faltantes</th><th class="ga">Feedbacks</th>
+      <th class="gt">Vac./Adm.</th><th>Estado</th>
+    </tr>`;
+    let totH=0,totD=0,totF=0,allP=[],n=0;
+    body.innerHTML=tecs.map(t=>{
+      const ti=DATA.indexOf(t);
+      const hl=activeTec===t.name?' class="tec-hi"':'';
+      if(mi<t.start){
+        return`<tr${hl} style="border-left:3px solid ${TCOLORS[ti]}">
+          <td>${t.name} <span class="code-tag">${t.code}</span> <span class="inc-badge">Inc. Feb</span></td>
+          <td colspan="6" style="text-align:center;color:var(--dim);font-family:var(--sans)">No activo en ${MESES[mi]}</td>
+        </tr>`;
+      }
+      const h=t.months[mi].h;const d=t.months[mi].d;const v=t.vac[mi];
+      const f=META-h-v;const p=h/META*100;
+      const adj=(h+v)/META*100; // adjusted % for status/color
+      totH+=h;totD+=d;totF+=f;allP.push(p);n++;
+      return`<tr${hl} style="border-left:3px solid ${TCOLORS[ti]}">
+        <td>${t.name} <span class="code-tag">${t.code}</span>${v>0?` <span class="vac-badge">${vacIcon()} vac.</span>`:''}</td>
+        <td style="color:${sc(adj)};background:${sb(adj)};font-weight:700">${h.toFixed(1)} h</td>
+        <td>${mbar(p,sc(adj))}</td>
+        <td>${faltBx(f)}</td>
+        <td style="color:#b45309">${d}</td>
+        <td>${v>0?`<span class="vac-badge">${vacIcon()} ${v}h</span>`:'—'}</td>
+        <td>${bx(adj)}</td>
+      </tr>`;
+    }).join('');
+    const avgP=n?allP.reduce((a,b)=>a+b,0)/n:0;
+    foot.innerHTML=`<tr>
+      <td>Total / Prom.</td>
+      <td>${totH.toFixed(1)} h</td><td>${avgP.toFixed(0)}%</td>
+      <td>${totF.toFixed(1)}</td><td>${totD}</td><td>—</td><td>—</td>
+    </tr>`;
+  }
+}
+
+// ── Master render ───────────────────────────────────────────────────────
+function render(){
+  renderKPIs();
+  updateCh1();
+  updateCh3();
+  updateCh4();
+  renderTecCards();
+  renderTable();
+  updateCh2Highlight();
+}
+
+initCh2();
+render();
+</script>
+</body>
+</html>
